@@ -1,6 +1,13 @@
 import './style.css';
 import { renderMarkdown } from './markdown.js';
 
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`)
+      .catch(error => console.warn('Offline support could not start:', error));
+  });
+}
+
 const storageKey = 'issa:source';
 const editor = document.querySelector('#editor');
 const reader = document.querySelector('#reader');

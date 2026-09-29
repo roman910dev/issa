@@ -6,7 +6,7 @@
   "packageManager": "pnpm@10.33.2",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
+    "build": "vite build && node scripts/build-sw.js",
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --test"
   },
