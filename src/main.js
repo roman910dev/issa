@@ -32,6 +32,7 @@ document.querySelector('#read-button').addEventListener('click', () => {
   article.replaceChildren(...renderMarkdown(source.value));
   blocks = [...article.querySelectorAll('.reading-block')];
   selectedIndex = 0;
+  ignoreProgrammaticScroll();
   editor.hidden = true;
   reader.hidden = false;
   window.scrollTo(0, 0);
@@ -44,6 +45,7 @@ document.querySelector('#edit-button').addEventListener('click', () => {
   source.focus();
 });
 document.querySelector('#top-button').addEventListener('click', () => {
+  ignoreProgrammaticScroll();
   setSelected(0);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
@@ -56,6 +58,11 @@ article.addEventListener('click', event => {
 
 // Speak Screen may scroll automatically. Only a recent manual gesture moves the start.
 function markUserScroll() { userScrollUntil = performance.now() + 900; }
+function ignoreProgrammaticScroll() {
+  userScrollUntil = 0;
+  if (pendingFrame) cancelAnimationFrame(pendingFrame);
+  pendingFrame = 0;
+}
 window.addEventListener('touchstart', markUserScroll, { passive: true });
 window.addEventListener('touchmove', markUserScroll, { passive: true });
 window.addEventListener('wheel', markUserScroll, { passive: true });
@@ -69,7 +76,8 @@ window.addEventListener('scroll', () => {
 window.addEventListener('resize', () => { if (!reader.hidden) selectAtMarker(); });
 function selectAtMarker() {
   if (!blocks.length) return;
-  const marker = Math.min(window.innerHeight * 0.27, 220);
+  if (window.scrollY <= 8) { setSelected(0); return; }
+  const marker = Math.min(window.innerHeight * 0.12, 96);
   let next = blocks.length - 1;
   for (let i = 0; i < blocks.length; i++) {
     if (blocks[i].getBoundingClientRect().bottom > marker) { next = i; break; }
