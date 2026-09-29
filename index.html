@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f6f4ef"><title>ISSA — Speak Screen reader</title><link rel="stylesheet" href="/src/style.css"></head>
+<body>
+<div id="app">
+  <section id="editor" class="editor-screen"><div class="editor-content">
+    <p class="eyebrow">ISSA · iOS Speak Screen Assistant</p>
+    <h1>Pick up where<br>you left off.</h1>
+    <p class="intro">Paste text or Markdown. Scroll to your place, then use Speak Screen as usual.</p>
+    <label for="source" class="field-label">Your text</label>
+    <textarea id="source" spellcheck="false" placeholder="Paste something to read…"></textarea>
+    <div class="editor-actions"><span id="save-status" class="save-status">Saved on this device</span><button id="read-button" class="primary-button" type="button">Start reading <span aria-hidden="true">↗</span></button></div>
+    <p class="privacy-note">Your text stays in this browser. HTML in Markdown is shown as text.</p>
+  </div></section>
+  <main id="reader" class="reader-screen" hidden>
+    <article id="article" class="article" aria-label="Reading text"></article>
+    <div class="reader-tools"><button id="edit-button" class="tool-button" type="button">Edit</button><span id="position" class="position" aria-live="off"></span><button id="top-button" class="tool-button" type="button">Start over</button></div>
+  </main>
+</div>
+<script src="/src/main.js"></script>
+</body>
+</html>

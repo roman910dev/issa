@@ -1,0 +1,40 @@
+:root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #262a27; background: #f6f4ef; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, textarea { font: inherit; }
+button { cursor: pointer; }
+[hidden] { display: none !important; }
+.editor-screen { min-height: 100svh; padding: max(48px, env(safe-area-inset-top)) 24px max(32px, env(safe-area-inset-bottom)); }
+.editor-content { max-width: 720px; margin: 0 auto; }
+.eyebrow { margin: 0 0 56px; color: #537365; font-size: 12px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(48px, 9vw, 78px); font-weight: 400; line-height: 1.03; letter-spacing: -.045em; }
+.intro { max-width: 510px; margin: 24px 0 48px; color: #657069; font-size: 18px; line-height: 1.5; }
+.field-label { display: block; margin-bottom: 12px; font-size: 13px; font-weight: 700; }
+textarea { display: block; width: 100%; min-height: min(42svh, 380px); padding: 20px; resize: vertical; border: 1px solid #d5d9d2; border-radius: 16px; outline: none; background: #fffefa; color: #262a27; font-size: 16px; line-height: 1.55; box-shadow: 0 8px 32px #3443320b; }
+textarea:focus { border-color: #537365; box-shadow: 0 0 0 3px #53736522; }
+textarea::placeholder { color: #9aa39b; }
+.editor-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 18px; }
+.save-status, .privacy-note { color: #7b847d; font-size: 12px; }
+.primary-button { padding: 14px 20px; border: 0; border-radius: 12px; background: #315d4a; color: white; font-size: 14px; font-weight: 700; }
+.primary-button span { margin-left: 10px; font-size: 18px; font-weight: 400; }
+.primary-button:active { transform: translateY(1px); }
+.privacy-note { margin-top: 22px; }
+.reader-screen { min-height: 100svh; }
+.article { max-width: 720px; min-height: calc(100svh - 90px); margin: 0 auto; padding: max(70px, calc(env(safe-area-inset-top) + 52px)) 28px 38svh; font-family: Georgia, "Times New Roman", serif; font-size: clamp(19px, 4.7vw, 22px); line-height: 1.72; overflow-wrap: anywhere; }
+.reading-block { position: relative; margin: 0 0 1.15em; }
+.reading-block.before-start { visibility: hidden; }
+.reading-block.current::before { content: ''; position: absolute; left: -18px; top: .38em; height: 1.05em; width: 3px; border-radius: 2px; background: #81aa8d; }
+.article h1, .article h2, .article h3, .article h4, .article h5, .article h6 { margin: 1.5em 0 .6em; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-weight: 700; line-height: 1.25; letter-spacing: -.025em; }
+.article h1:first-child, .article h2:first-child, .article h3:first-child { margin-top: 0; }
+.article h1 { font-size: 1.75em; }.article h2 { font-size: 1.4em; }.article h3 { font-size: 1.18em; }.article h4, .article h5, .article h6 { font-size: 1em; }
+.article ul, .article ol { padding-left: 1.5em; }.article li { padding-left: .15em; margin: .35em 0; }
+.article blockquote { padding-left: 1em; border-left: 3px solid #a3b5a5; color: #4d6254; }.article blockquote p { margin: 0; }
+.article pre { padding: 18px; overflow-x: auto; border-radius: 10px; background: #e9ece6; font-size: .72em; line-height: 1.5; white-space: pre; }
+.article code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82em; }
+.article hr { margin: 2em 0; border: 0; border-top: 1px solid #d4dbd1; }
+.article a { color: #315d4a; text-decoration-thickness: 1px; text-underline-offset: .15em; }
+.reader-tools { position: fixed; z-index: 2; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); left: 16px; display: flex; align-items: center; justify-content: space-between; max-width: 420px; height: 50px; margin: 0 auto; padding: 5px; border: 1px solid #d6ddd4; border-radius: 14px; background: #fffefaed; box-shadow: 0 8px 28px #25382d1e; backdrop-filter: blur(12px); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.tool-button { min-width: 80px; height: 40px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: #315d4a; font-size: 13px; font-weight: 700; }
+.tool-button:active { background: #e8eee8; }
+.position { color: #6c7b70; font-size: 12px; font-variant-numeric: tabular-nums; }
+@media (max-width: 500px) { .eyebrow { margin-bottom: 48px; }.intro { margin-bottom: 36px; }.editor-actions { align-items: stretch; flex-direction: column-reverse; }.primary-button { width: 100%; }.save-status { text-align: center; } }
