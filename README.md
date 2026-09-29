@@ -5,7 +5,8 @@ A small, local reading surface for iOS Speak Screen. Paste text or Markdown, scr
 ## Run
 
 ```sh
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 Open the printed network URL in Safari on your iPhone while both devices are on the same network. Text is saved in that browser's local storage. There is no server-side text storage.
@@ -18,4 +19,4 @@ Open the printed network URL in Safari on your iPhone while both devices are on 
 4. Confirm that speech begins at the marked block and continues forward.
 5. Stop speech, scroll back, and confirm earlier blocks reappear and can be read.
 
-Speak Screen's exact behavior with dynamic web content needs verification on a physical iPhone. Markdown support covers common headings, paragraphs, lists, quotes, fenced code, emphasis, inline code, and HTTP(S) links. Raw HTML is displayed as text.
+Speak Screen's exact behavior with dynamic web content needs verification on a physical iPhone. Markdown is rendered with Marked and sanitized with DOMPurify, including tables, links, lists, and fenced code. Mermaid and syntax highlighting are not included yet. The app uses a local build of these libraries rather than a CDN; offline installation will be a later step.
