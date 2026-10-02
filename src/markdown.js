@@ -2,6 +2,20 @@ import { marked } from 'marked';
 import DOMPurify from 'dompurify';
 
 export function renderMarkdown(markdown) {
+  // Only a complete, leading frontmatter block is metadata; leave other Markdown alone.
+  const frontmatter = markdown.match(/^\uFEFF?---[ \t]*\r?\n((?:[^\n]*\n)*?)---[ \t]*(?:\r?\n|$)/);
+  const frontmatterBlocks = [];
+  if (frontmatter) {
+    const paragraph = document.createElement('p');
+    paragraph.className = 'reading-block frontmatter';
+    paragraph.textContent = frontmatter[1].replace(/\r?\n$/, '');
+    const opening = document.createElement('hr');
+    const closing = document.createElement('hr');
+    opening.className = closing.className = 'reading-block';
+    frontmatterBlocks.push(opening, ...(paragraph.textContent ? [paragraph] : []), closing);
+    markdown = markdown.slice(frontmatter[0].length);
+  }
+
   // Parse the whole document so links defined in later blocks still resolve.
   const html = marked.parse(markdown, { gfm: true });
   const safeHtml = DOMPurify.sanitize(html, {
@@ -12,7 +26,7 @@ export function renderMarkdown(markdown) {
   const template = document.createElement('template');
   template.innerHTML = safeHtml;
 
-  return [...template.content.childNodes].flatMap(node => {
+  const blocks = [...template.content.childNodes].flatMap(node => {
     if (node.nodeType === 1) {
       if (node.tagName === 'TABLE') {
         const wrapper = document.createElement('div');
@@ -29,4 +43,5 @@ export function renderMarkdown(markdown) {
     paragraph.textContent = node.textContent;
     return [paragraph];
   });
+  return [...frontmatterBlocks, ...blocks];
 }
