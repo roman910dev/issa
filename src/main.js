@@ -9,6 +9,7 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
 }
 
 const storageKey = 'issa:source';
+const positionKey = 'issa:position';
 const editor = document.querySelector('#editor');
 const reader = document.querySelector('#reader');
 const source = document.querySelector('#source');
@@ -19,25 +20,47 @@ let blocks = [];
 let selectedIndex = 0;
 let userScrollUntil = 0;
 let pendingFrame = 0;
+let savedPosition = null;
 
 try { source.value = localStorage.getItem(storageKey) || ''; }
 catch { saveStatus.textContent = 'Browser storage unavailable'; }
+try {
+  const saved = JSON.parse(localStorage.getItem(positionKey));
+  if (saved?.source === source.value && Number.isInteger(saved.index) && saved.index >= 0) {
+    savedPosition = saved;
+  }
+} catch { /* Missing or invalid positions start at the beginning. */ }
+let previousSource = source.value;
 source.addEventListener('input', () => {
-  try { localStorage.setItem(storageKey, source.value); saveStatus.textContent = 'Saved on this device'; }
+  const changed = source.value !== previousSource;
+  previousSource = source.value;
+  if (changed) savedPosition = null;
+  try {
+    // Invalidate first so an interrupted save cannot pair new text with an old position.
+    if (changed) localStorage.removeItem(positionKey);
+    localStorage.setItem(storageKey, source.value);
+    saveStatus.textContent = 'Saved on this device';
+  }
   catch { saveStatus.textContent = 'Browser storage unavailable'; }
 });
 
 document.querySelector('#read-button').addEventListener('click', () => {
   if (!source.value.trim()) { source.focus(); return; }
+  openReader();
+});
+function openReader() {
   article.replaceChildren(...renderMarkdown(source.value));
   blocks = [...article.querySelectorAll('.reading-block')];
-  selectedIndex = 0;
+  const restoredIndex = savedPosition?.source === source.value && savedPosition.index < blocks.length
+    ? savedPosition.index : 0;
   ignoreProgrammaticScroll();
   editor.hidden = true;
   reader.hidden = false;
-  window.scrollTo(0, 0);
-  setSelected(0);
-});
+  setSelected(restoredIndex);
+  const top = restoredIndex === 0 ? 0
+    : window.scrollY + blocks[restoredIndex].getBoundingClientRect().top - readingMarker();
+  window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+}
 document.querySelector('#edit-button').addEventListener('click', () => {
   reader.hidden = true;
   editor.hidden = false;
@@ -74,10 +97,23 @@ window.addEventListener('scroll', () => {
   pendingFrame = requestAnimationFrame(() => { pendingFrame = 0; selectAtMarker(); });
 }, { passive: true });
 window.addEventListener('resize', () => { if (!reader.hidden) selectAtMarker(); });
+// Mobile PWAs can be terminated without an unload event. Flush a queued gesture
+// when backgrounded; ordinary selections are persisted immediately below.
+function flushPosition() {
+  if (!reader.hidden && pendingFrame) {
+    ignoreProgrammaticScroll();
+    selectAtMarker();
+  }
+}
+window.addEventListener('pagehide', flushPosition);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') flushPosition();
+});
+function readingMarker() { return Math.min(window.innerHeight * 0.12, 96); }
 function selectAtMarker() {
   if (!blocks.length) return;
   if (window.scrollY <= 8) { setSelected(0); return; }
-  const marker = Math.min(window.innerHeight * 0.12, 96);
+  const marker = readingMarker();
   let next = blocks.length - 1;
   for (let i = 0; i < blocks.length; i++) {
     if (blocks[i].getBoundingClientRect().bottom > marker) { next = i; break; }
@@ -94,4 +130,12 @@ function setSelected(index) {
     else block.removeAttribute('aria-hidden');
   });
   position.textContent = `${selectedIndex + 1} / ${blocks.length}`;
+  if (!blocks.length || (savedPosition?.source === source.value && savedPosition.index === index)) return;
+  try {
+    const nextPosition = { source: source.value, index };
+    localStorage.setItem(positionKey, JSON.stringify(nextPosition));
+    savedPosition = nextPosition;
+  } catch { saveStatus.textContent = 'Browser storage unavailable'; }
 }
+
+if (savedPosition && source.value.trim()) openReader();

@@ -21,7 +21,7 @@ Supports headings, emphasis, lists, blockquotes, links, images, dividers, code, 
 
 Markdown is rendered with Marked and sanitized with DOMPurify. Selection works on top-level blocks: a list, table, or code block is selected as a whole.
 
-The current source is saved in browser local storage. There is one saved document; reading position is not saved. No backend, account, or document upload is involved, though external images can make network requests. Clearing site data removes saved text and offline caches.
+The current source and selected reading block are saved in browser local storage. Reopening the app, including after closing the installed PWA, restores the reader at that block while the text is unchanged. Editing the text resets the saved position; **Start over** saves the first block as your position. There is one saved document. No backend, account, or document upload is involved, though external images can make network requests. Clearing site data removes saved text, reading position, and offline caches.
 
 ## Offline and Home Screen access
 
