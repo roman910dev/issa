@@ -45,11 +45,12 @@ textarea::placeholder { color: var(--placeholder); }
 .primary-button:active { transform: translateY(1px); }
 .privacy-note { margin-top: 22px; }
 .reader-screen { min-height: 100svh; }
-.article { max-width: 720px; min-height: calc(100svh - 90px); margin: 0 auto; padding: max(70px, calc(env(safe-area-inset-top) + 52px)) 28px 38svh; font-family: Georgia, "Times New Roman", serif; font-size: clamp(19px, 4.7vw, 22px); line-height: 1.72; overflow-wrap: anywhere; }
+.article { min-height: calc(100svh - 90px); margin: 0 auto; padding: max(70px, calc(env(safe-area-inset-top) + 52px)) 28px 38svh; font-family: Georgia, "Times New Roman", serif; font-size: clamp(19px, 4.7vw, 22px); line-height: 1.72; overflow-wrap: anywhere; }
 .reading-block { position: relative; margin: 0 0 1.15em; }
+.article > .reading-block { max-width: 664px; margin-inline: auto; }
 .article .frontmatter { white-space: pre-wrap; }
 .reading-block.before-start { visibility: hidden; }
-.reading-block.current::before { content: ''; position: absolute; left: -18px; top: .38em; height: 1.05em; width: 3px; border-radius: 2px; background: var(--marker); }
+.reading-block.current::before, .table-scroll.current > table::before { content: ''; position: absolute; left: -18px; top: .38em; height: 1.05em; width: 3px; border-radius: 2px; background: var(--marker); }
 .article h1, .article h2, .article h3, .article h4, .article h5, .article h6 { margin: 1.5em 0 .6em; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-weight: 700; line-height: 1.25; letter-spacing: -.025em; }
 .article h1:first-child, .article h2:first-child, .article h3:first-child { margin-top: 0; }
 .article h1 { font-size: 1.75em; }.article h2 { font-size: 1.4em; }.article h3 { font-size: 1.18em; }.article h4, .article h5, .article h6 { font-size: 1em; }
@@ -57,9 +58,11 @@ textarea::placeholder { color: var(--placeholder); }
 .article blockquote { padding-left: 1em; border-left: 3px solid var(--quote-border); color: var(--quote-text); }.article blockquote p { margin: 0; }
 .article pre { padding: 18px; overflow-x: auto; border-radius: 10px; background: var(--inset); font-size: .72em; line-height: 1.5; white-space: pre; }
 .article code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .82em; }
-.article .table-scroll { max-width: 100%; overflow-x: auto; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-.article table { width: max-content; min-width: 100%; border-collapse: collapse; font: inherit; }
-.article th, .article td { padding: 10px 12px; border: 1px solid var(--content-border); font: inherit; text-align: left; vertical-align: top; }
+/* Put the gutters inside the scroll area so they scroll away with the table. */
+.article > .table-scroll { width: calc(100% + 56px); max-width: none; margin-inline: -28px; padding-inline: 28px; overflow-x: auto; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+.article > .table-scroll.current::before { content: none; }
+.article table { position: relative; width: max-content; min-width: min(100%, 664px); margin-inline: auto; border-collapse: collapse; font: inherit; font-size: .9em; }
+.article th, .article td { max-width: 35ch; padding: 10px 12px; border: 1px solid var(--content-border); font: inherit; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
 .article th { background: var(--inset); font-weight: 700; }
 .article table code { font: inherit; }
 .article img { display: block; max-width: 100%; height: auto; }
