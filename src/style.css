@@ -61,8 +61,8 @@ textarea::placeholder { color: var(--placeholder); }
 /* Put the gutters inside the scroll area so they scroll away with the table. */
 .article > .table-scroll { width: calc(100% + 56px); max-width: none; margin-inline: -28px; padding-inline: 28px; overflow-x: auto; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .article > .table-scroll.current::before { content: none; }
-.article table { position: relative; width: max-content; min-width: min(100%, 664px); margin-inline: auto; border-collapse: collapse; font: inherit; }
-.article th, .article td { padding: 10px 12px; border: 1px solid var(--content-border); font: inherit; text-align: left; vertical-align: top; }
+.article table { position: relative; width: max-content; min-width: min(100%, 664px); margin-inline: auto; border-collapse: collapse; font: inherit; font-size: .9em; }
+.article th, .article td { max-width: 35ch; padding: 10px 12px; border: 1px solid var(--content-border); font: inherit; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
 .article th { background: var(--inset); font-weight: 700; }
 .article table code { font: inherit; }
 .article img { display: block; max-width: 100%; height: auto; }
